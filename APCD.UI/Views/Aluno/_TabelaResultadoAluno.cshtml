@@ -1,0 +1,27 @@
+﻿@model IEnumerable<APCD.Modelos.Alunos>
+<script language="javascript" type="text/javascript">
+    function SelecionarAluno(AlunoId, AlunoNone) {
+        window.returnValue = AlunoId + ',' + AlunoNone;
+        window.close();
+    }
+</script>
+<table>
+    <tr>
+        <th>
+        </th>
+        <th>
+            Aluno Nome
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <a href="#" onclick='javascript:SelecionarAluno("@item.AlunoId","@item.AlunoNome")'>Selecionar</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AlunoNome)
+            </td>
+        </tr>
+    }
+</table>

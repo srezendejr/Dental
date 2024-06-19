@@ -1,0 +1,26 @@
+﻿@model IEnumerable<KeyValuePair<string, string>>
+
+<table>
+    <tr>
+        <th>
+            Dente
+        </th>
+        <th>
+            Valor
+        </th>
+    </tr>
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Key)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Value)
+        </td>
+    </tr>
+    }
+}
+</table>

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<APCD.Modelos.Pacientes>
+<script language="javascript" type="text/javascript">
+    function SelecionarPaciente(PacienteId, PacienteNome) {
+        window.returnValue = PacienteId+','+PacienteNome;
+        window.close();
+    }
+</script>
+<table style="width: 100%; border: 1px solid gray">
+    <tr>
+    </tr>
+    <tr>
+        <th>
+            Selecionar
+        </th>
+        <th>
+            Nome
+        </th>
+        <th>
+            Data Nascimento
+        </th>
+        <th>
+            CPF
+        </th>
+        <th>
+            Fone Residencial
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <a href="#" onclick='javascript:SelecionarPaciente("@item.PacienteId.ToString()", "@item.PacienteNome");'>Selecionar</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PacienteNome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataNascimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PacienteCPF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PacienteFoneResidencial)
+            </td>
+        </tr>
+    }
+</table>

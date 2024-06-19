@@ -1,0 +1,126 @@
+﻿@model APCD.Modelos.Matriculas
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        $("#txtData").mask("99/99/9999");
+    });
+    function ListarTurma() {
+        var Texto = $("#txtPesquisaTurma").val();
+        if (Texto.length >= 3) {
+            $.post('@Url.Content("~/Matricula/PesquisaTurma")', { param: Texto }, function (result) { $("#LstTurmas").html(result); });
+        }
+    }
+</script>
+
+<table>
+</table>
+<div style="border: 1px solid transparent; width: 100%;">
+    <div style="float: left; position: relative; border: 1px solid transparent; width: 50%;
+        height: 100%">
+        <div>
+            @Html.Label("Pesquisar Turmas:")
+        </div>
+        <div>
+            @Html.TextBox("txtPesquisaTurma", "", new { id = "txtPesquisaTurma", style = "width:200px", onkeydown = "javascript:ListarTurma();" })
+        </div>
+        <div id="LstTurmas">
+            @if (Model == null)
+            {
+                @Html.Partial("_FormPesquisaTurma")
+            }
+        </div>
+    </div>
+    <div style="float: right; position: relative; border: 1px solid transparent; width: 49%; top:-20px;
+        height: 100%">
+        <div id="LstMatriculaTurma">
+            @if (TempData["MatTurma"] != null)
+            { 
+                @Html.Partial("_FormMatriculaTurma", TempData["MatTurma"])
+            }
+        </div>
+    </div>
+</div>
+<br />
+<div>
+    <table id="TableForms">
+        <tr>
+            <td>
+                @Html.HiddenFor(model => model.AlunoId)
+                @Html.Label("Aluno:")
+                @Html.HiddenFor(model => model.MatriculaId, new { id = "hdIdMatricula" })
+            </td>
+            <td>
+                @Html.LabelFor(model => model.MidiaId)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @if (Model == null)
+                { 
+                    @Html.TextBox("txtAluno", new APCD.Dados.AlunoDados().RetornaAlunoPorId(Convert.ToInt32(Request.QueryString["IdAluno"])).AlunoNome, new { id = "txtAluno", @readonly = "readonly", style = "width:300px" })
+                }
+                else
+                { 
+                    @Html.TextBox("txtAluno", new APCD.Dados.AlunoDados().RetornaAlunoPorId(Convert.ToInt32(Model.AlunoId)).AlunoNome, new { id = "txtAluno", @readonly = "readonly", style = "width:300px" })
+                }
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.MidiaId, ViewData["Midia"] as MultiSelectList, new { id = "cbMidia" })
+                @Html.ValidationMessageFor(model => model.MidiaId)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.MatriculaData)
+            </td>
+            <td>
+                @Html.LabelFor(model => model.MatriculaAnoGraduacao)
+            </td>
+            <td>
+                @if (Model != null)
+                {
+                    @Html.LabelFor(model => model.MatriculaStatus)
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.TextBoxFor(model => model.MatriculaData, new { id = "txtData", @readonly = "true", style = "width:120px;" })
+                @Html.ValidationMessageFor(model => model.MatriculaData)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.MatriculaAnoGraduacao, (List<SelectListItem>)(ViewData["AnoGrad"]), new { id = "cbAnoGrad" })
+            </td>
+            <td>
+                @if (Model != null)
+                {
+                    @Html.DropDownListFor(model => model.MatriculaStatus, (List<SelectListItem>)(ViewData["Status"]), new { id = "cbStatus" })
+                    @Html.ValidationMessageFor(model => model.MatriculaStatus)
+                }
+            </td>
+        </tr>
+        <tr>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.MatriculaOpcaoCurso)
+            </td>
+        </tr>
+        <tr>
+            <th colspan="3">
+                @Html.TextAreaFor(model => model.MatriculaOpcaoCurso, new { id = "txtOpcao", @class = "TextoLongo" })
+                @Html.ValidationMessageFor(model => model.MatriculaOpcaoCurso)
+            </th>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.MatriculaMiniCurriculum)
+            </td>
+        </tr>
+        <tr>
+            <th colspan="3">
+                @Html.TextAreaFor(model => model.MatriculaMiniCurriculum, new { id = "txtMiniCV", @class = "TextoLongo" })
+                @Html.ValidationMessageFor(model => model.MatriculaMiniCurriculum)
+            </th>
+        </tr>
+    </table>
+</div>

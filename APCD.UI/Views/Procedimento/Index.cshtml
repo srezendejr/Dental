@@ -1,0 +1,73 @@
+﻿@model IEnumerable<APCD.Modelos.Procedimentos>
+@{
+    ViewBag.Title = "Procedimento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="@Url.Content("~/Scripts/jquery-1.5.2.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/grid.locale-pt-br.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.jqGrid.src.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.jqGrid.min.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/ui.jqgrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/css/ui-lightness/jquery-ui-1.8.13.custom.css")" rel="stylesheet"type="text/css" />
+<fieldset>
+    <legend>Lista de Mídias</legend>
+    <div style="float: right; padding-bottom: 5px;">
+        <input type="button" id="btnNovo" value="Novo" 
+        onclick="javascript:window.location='@Url.Content("~/Procedimento/Novo/")';" 
+        style=" min-height:60px; min-width:80px;" />
+    </div>
+    <br />
+    <br />
+    <div id="pager">
+    </div>
+    <br />
+    <br />
+    <table id="tblProcedimentos">
+    </table>
+    <div id="pager1">
+    </div>
+</fieldset>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var colindex;
+        jQuery("#tblProcedimentos").jqGrid({
+            url: '@Url.Content("~/Procedimento/PreencherGrid/")',
+            datatype: "json",
+            mtype: 'GET',
+            colNames: ['Id', 'Nome', 'Descrição', 'Valor', 'Tipo'],
+            colModel: [
+                      { name: 'Id', index: 'Id', width: 60, hidden: true },
+                      { name: 'Nome', index: 'Nome', width: 130 },
+                      { name: 'Descricao', index: 'Descricao', width: 130 },
+                      { name: 'Valor', index: 'Valor', width: 130 },
+                      { name: 'Tipo', index: 'Tipo', width: 130 }
+               ],
+            onSelectRow: function (id, rowIndex) {
+                if (jQuery("#tblProcedimentos").jqGrid('getGridParam', 'records') > 0) {
+                    var Id = $('#tblProcedimentos').jqGrid('getCell', id, 'Id'); //Seleciona o Id do registro
+                    window.location = '@Url.Content("~/Procedimento/Editar?id=")' + Id;
+                }
+                else {
+                    alert('Selecione um registro');
+                }
+            },
+            multiselect: false, //checkbox na primeira coluna
+            jsonReader: { repeatitems: true, id: "Id" },
+            rowNum: 50,
+            loadonce: true, //Permite ordenação da grid
+            rowList: [5, 10, 20, 50, 100],
+            pager: jQuery('#pager1'),
+            sortorder: 'Desc',
+            sortname: 'Id',
+            viewrecords: true,
+            height: 'auto',
+            autowidth: true,
+            caption: ""
+        });
+        jQuery("#tblProcedimentos").jqGrid('navGrid', '#pager1', { del: false, add: false, edit: false },
+            {}, {}, {}, { multipleSearch: false });
+        //.jqGrid('navButtonAdd', "#pager1", { caption: "NewButton", buttonicon: "ui-icon-newwin", onClickButton: null, position: "last", title: "", cursor: "pointer" });
+    });
+</script>

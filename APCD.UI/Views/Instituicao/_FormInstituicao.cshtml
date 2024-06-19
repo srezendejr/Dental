@@ -1,0 +1,44 @@
+﻿@model APCD.Modelos.Instituicoes
+<table id="TableForms">
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.InstituicaoNome)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.InstituicaoCoordenador)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.TextBoxFor(model => model.InstituicaoNome, new { id="txtNomeInst", style="width:350px;", maxlength="50"})
+            @Html.ValidationMessageFor(model => model.InstituicaoNome)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.InstituicaoCoordenador, new { id = "txtNomeCoord", style = "width:350px;", maxlength = "50" })
+            @Html.ValidationMessageFor(model => model.InstituicaoCoordenador)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.InstituicaoFone)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.InstituicaoEmail)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.TextBoxFor(model => model.InstituicaoFone, new { id="txtNroFone", style="width:120px"})
+            @Html.ValidationMessageFor(model => model.InstituicaoFone)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.InstituicaoEmail, new { id="txtEmail", style="width:350px;", maxlength="255"})
+            @Html.ValidationMessageFor(model => model.InstituicaoEmail)
+        </td>
+    </tr>
+</table>
+<script language="javascript" type="text/javascript">
+    $(function () {
+        $("#txtNroFone").mask("(99)9999-9999");
+    })
+</script>

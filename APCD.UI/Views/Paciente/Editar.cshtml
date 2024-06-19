@@ -1,0 +1,355 @@
+﻿@model APCD.Modelos.Pacientes
+@{
+    ViewBag.Title = "Editar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<script language="javascript" type="text/javascript">
+    $(function () {
+        $("#txtDataNasc").mask("99/99/9999");
+    });
+    $(function () {
+        $("#txtPacienteCPF").mask("999.999.999-99");
+    });
+    $(function () {
+        $("#txtCep").mask("99999-999");
+        $("#txtFoneRes").mask("(99)9999-9999");
+        $("#txtFoneCel").mask("(99)9999-9999");
+        $("#txtFoneCom").mask("(99)9999-9999");
+    });
+    function PesquisarCep() {
+        var cep = document.getElementById("txtCep").value;
+        $.ajax({
+            type: 'POST',
+            dataType: 'Json',
+            url: '@Url.Content("~/Paciente/PesquisarCep?CodigoCep=")' + cep,
+            success: function (result) {
+                if (result == null) {
+                    alert("Cep não encontrado.");
+                    $("#txtCep").focus();
+                }
+                else {
+                    $("#cbTipoLog").val(result.CepTipoLogradouro);
+                    $("#txtEndereco").val(result.CepLogradouro);
+                    $("#txtComplemento").val(result.CepComplementoLog);
+                    $("#txtBairro").val(result.CepBairro);
+                    $("#txtCidade").val(result.CepCidade);
+                    $("#cbUF").val(result.CepUF);
+                    $("#txtNroEndereco").focus();
+                }
+            },
+            error: function (result, ajaxOptions, thrownError) { alert("Erro: " + result.status + "-" + result.statusText + "-" + thrownError); }
+        });
+    }
+    function ExcluirRegistro() {
+        var id = document.getElementById("hdId").value;
+        if (confirm("Deseja excluir este registro ?") == true) {
+            window.location = '@Url.Content("~/Paciente/Excluir?Id=")' + id;
+        }
+    }
+    $(document).ready(
+        function () {
+            $("#cboInsituicao").change(function () {
+                $.getJSON('@Url.Content("~/Paciente/RetornaCursoPorInstituicao?Instituicao=")' + $("#cboInsituicao").val(), null,
+                    function (data) {
+                        $("#cboCurso").empty();
+                        $.each(data, function (indice, curso) {
+                            $("#cboCurso").append("<option value='" + curso.CursoId + "'>" + curso.CursoNome + "</option>");
+                        });
+                    });
+            })
+        });
+        $(document).ready(
+        function () {
+            $("#cboCurso").change(function () {
+                $.getJSON('@Url.Content("~/Paciente/RetornaTurmaPorCurso?Curso=")' + $("#cboCurso").val(), null,
+                    function (data) {
+                        $("#cboTurma").empty();
+                        $.each(data, function (indice, turma) {
+                            $("#cboTurma").append("<option value='" + turma.TurmaId + "'>" + turma.TurmaNome + "</option>");
+                        });
+                    });
+            })
+        });
+        $(document).ready(
+        function () {
+            $("#cboTurma").change(function () {
+                $.getJSON('@Url.Content("~/Paciente/RetornaAlunosPorTurma?Turma=")' + $("#cboTurma").val(), null,
+                    function (data) {
+                        $("#cboAluno").empty();
+                        $.each(data, function (indice, aluno) {
+                            $("#cboAluno").append("<option value='" + aluno.AlunoId + "'>" + aluno.AlunoNome + "</option>");
+                        });
+                    });
+            })
+        });
+</script>
+
+@using (Html.BeginForm("Atualizar", "Paciente"))
+{
+
+    <fieldset>
+        <legend>Pacientes</legend>
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.PacienteId, new { id = "hdId" })
+        @Html.HiddenFor(model => model.PacienteDataCadastro, new { id = "hdDataCad" })
+        <table id="TableForms">
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.PacienteNome)
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.DataNascimento)
+                </td>
+                <td>
+                    Data de Cadastro:
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(model => model.PacienteNome, new { id = "txtNomePaciente", maxlength = "50", style = "width:300px" })
+                    @Html.ValidationMessageFor(model => model.PacienteNome)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.DataNascimento, new { id = "txtDataNasc", style = "width:100px" })
+                    @Html.ValidationMessageFor(model => model.DataNascimento)
+                </td>
+                <td>
+                    @Html.TextBox("txtDataCadastro", DateTime.Now.ToString("dd/MM/yyyy"), new { id = "txtDataCadastro", disabled = "disabled", style = "width:100px" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.PacienteCPF)
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.PacienteRG)
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.PacienteRGExped)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(model => model.PacienteCPF, new { id = "txtPacienteCPF", style = "width:115px" })
+                    @Html.ValidationMessageFor(model => model.PacienteCPF)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.PacienteRG, new { id = "txtPacienteRG", style = "width:115px", maxlength = "10" })
+                    @Html.ValidationMessageFor(model => model.PacienteRG)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.PacienteRGExped, new { id = "txtPacienteRGExp", style = "width:115px" })
+                    @Html.ValidationMessageFor(model => model.PacienteRGExped)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.PacienteSexo)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DropDownListFor(model => model.PacienteSexo, (List<SelectListItem>)ViewData["Sexo"], new { id = "cbSexo" })
+                </td>
+            </tr>
+            <tr>
+                <th colspan="3">
+                    Filiação
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.PacienteMae)
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.PacientePai)
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.PacienteResponsavel)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(model => model.PacienteMae, new { id = "txtPacienteMae", maxlength = "50", style = "width:300px" })
+                    @Html.ValidationMessageFor(model => model.PacienteMae)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.PacientePai, new { id = "txtPacientePai", maxlength = "50", style = "width:300px" })
+                    @Html.ValidationMessageFor(model => model.PacientePai)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.PacienteResponsavel, new { id = "txtPacienteResponsavel", maxlength = "50", style = "width:300px;" })
+                    @Html.ValidationMessageFor(model => model.PacienteResponsavel)
+                </td>
+            </tr>
+            <tr>
+                <th colspan="3">
+                    Endereço
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.PacienteCep)
+                </td>
+                <td>
+                    Endereço:
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.PacienteComplemento)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(model => model.PacienteCep, new { id = "txtCep", style = "width:100px" })
+                    <a href="javascript:PesquisarCep()">Pesquisar</a>
+                    @Html.ValidationMessageFor(model => model.PacienteCep)
+                </td>
+                <td>
+                    <span>
+                        @Html.DropDownListFor(model => model.PacienteTipoLog, (List<SelectListItem>)(ViewData["TipoLog"]), new { id = "cbTipoLog", style = "width:150px" })
+                        @Html.ValidationMessageFor(model => model.PacienteTipoLog)
+                    </span><span>
+                        @Html.TextBoxFor(model => model.PacienteLogradouro, new { id = "txtEndereco", maxlength = "50", style = "width:230px" }),
+                        @Html.ValidationMessageFor(model => model.PacienteLogradouro)
+                    </span><span>
+                        @Html.TextBoxFor(model => model.PacienteNroEndereco, new { id = "txtNroEndereco", style = "width:50px" })
+                    </span>
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.PacienteComplemento, new { id = "txtComplemento", maxlength = "100", sytle = "width:300px" })
+                    @Html.ValidationMessageFor(model => model.PacienteComplemento)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.PacienteBairro)
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.PacienteCidade)
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.PacienteUF)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(model => model.PacienteBairro, new { id = "txtBairro", maxlength = "50", style = "width:250px" })
+                    @Html.ValidationMessageFor(model => model.PacienteBairro)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.PacienteCidade, new { id = "txtCidade", maxlength = "100", style = "width:300px" })
+                    @Html.ValidationMessageFor(model => model.PacienteCidade)
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.PacienteUF, (List<SelectListItem>)ViewData["UF"], new { id = "cbUF" })
+                    @Html.ValidationMessageFor(model => model.PacienteUF)
+                </td>
+            </tr>
+            <tr>
+                <th colspan="3">
+                    Contato
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.PacienteFoneResidencial)
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.PacienteFoneCelular)
+                </td>
+                <td>
+                    <span style="padding-right: 1.2em">
+                        @Html.LabelFor(model => model.PacienteFoneComercial)
+                    </span>
+                    @Html.LabelFor(model => model.PacienteFoneComercialRamal)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(model => model.PacienteFoneResidencial, new { id = "txtFoneRes", style = "width:120px" })
+                    @Html.ValidationMessageFor(model => model.PacienteFoneResidencial)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.PacienteFoneCelular, new { id = "txtFoneCel", style = "width:120px" })
+                    @Html.ValidationMessageFor(model => model.PacienteFoneCelular)
+                </td>
+                <td>
+                    <span style="padding-right: 1em">
+                        @Html.TextBoxFor(model => model.PacienteFoneComercial, new { id = "txtFoneCom", style = "width:120px" })
+                        @Html.ValidationMessageFor(model => model.PacienteFoneComercial)
+                    </span><span>
+                        @Html.TextBoxFor(model => model.PacienteFoneComercialRamal, new { id = "txtRamal", style = "width:120px" })
+                        @Html.ValidationMessageFor(model => model.PacienteFoneComercialRamal)
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.PacienteEmail)
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.MidiaId)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(model => model.PacienteEmail, new { id = "txtEmail", style = "width:300px", maxlenght = "100" })
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.MidiaId, (List<SelectListItem>)(ViewData["Midia"]), new { id = "cbMidia" })
+                    @Html.ValidationMessageFor(model => model.MidiaId)
+                </td>
+            </tr>
+            <tr>
+                <th colspan="3">
+                    Atendimento
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.InstituicaoId)
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.CursoId)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DropDownListFor(model => model.InstituicaoId, ViewData["Instituicao"] as MultiSelectList, new { id = "cboInsituicao", style = "width:250px" })
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.CursoId, ViewData["Cursos"] as MultiSelectList, new { id = "cboCurso", style = "width:250px" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.TurmaId)
+                </td>
+                <td>
+                    @Html.LabelFor(modelo => modelo.AlunoId)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DropDownListFor(model => model.TurmaId, ViewData["Turmas"] as MultiSelectList, new { id = "cboTurma", style = "width:250px" })
+                </td>
+                <td>
+                    @Html.DropDownListFor(Model => Model.AlunoId, ViewData["Alunos"] as MultiSelectList, new { id = "cboAluno", style="width:250px"})
+                </td>
+            </tr>
+            <tr>
+                <th colspan="3" style="background-color: transparent !Important;">
+                    <span style="padding-right: 1em">
+                        <input type="button" value="Excluir" id="btnExcluir" onclick="javascript:ExcluirRegistro();" />
+                    </span><span>
+                        <input type="button" value="Voltar" id="btnVoltar" onclick="javascript:window.location='@Url.Content("~/Paciente/Index")';" />
+                    </span><span>
+                        <input type="submit" value="Salvar" id="btnSalvar" />
+                    </span>
+                </th>
+            </tr>
+        </table>
+    </fieldset>
+}
+

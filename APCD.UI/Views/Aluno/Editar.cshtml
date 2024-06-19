@@ -1,0 +1,36 @@
+﻿@model APCD.Modelos.Alunos
+@{
+    ViewBag.Title = "Editar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Salvar", "Aluno"))
+{ 
+    <fieldset>
+        <legend>Alunos</legend>
+        @Html.ValidationSummary(false)
+        @Html.HiddenFor(model => model.AlunoId, new { id="hdId"})
+        <table id="TableForms">
+        @Html.Partial("_FormAluno")
+            <tr>
+                <th colspan="3" style="background-color: transparent !Important;">
+                    <span style="padding-right:1em">
+                        <input type="button" value="Excluir" id="btnExcluir" onclick="javascript:ExcluirRegistro();" />
+                    </span>
+                    <span>
+                        <input type="button" value="Voltar" id="btnVoltar" onclick="javascript:window.location='@Url.Content("~/Aluno/Index")';" />
+                    </span><span>
+                        <input type="submit" value="Salvar" id="btnSalvar" />
+                    </span>
+                </th>
+            </tr>
+        </table>
+    </fieldset>
+}
+<script language="javascript" type="text/javascript">
+    function ExcluirRegistro() {
+        var id = document.getElementById("hdId").value;
+        if (confirm("Deseja excluir este registro ?") == true) {
+            window.location = '@Url.Content("~/Aluno/Excluir?Id=")' + id;
+        }
+    }
+</script>

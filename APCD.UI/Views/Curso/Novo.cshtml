@@ -1,0 +1,104 @@
+﻿@model APCD.Modelos.Cursos
+@{
+    ViewBag.Title = "Novo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Salvar", "Curso"))
+{ 
+    <fieldset>
+        <legend>Cursos</legend>
+        <table id="TableForms" style="width: auto">
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.CursoNome)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(model => model.CursoNome, new { id = "txtNome", style = "width:200px", maxlength = "50" })
+                    @Html.ValidationMessageFor(model => model.CursoNome)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.CursoEspecialidade)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.TextBoxFor(model => model.CursoEspecialidade, new { id = "txtEspecialidade", style = "width:200px", maxlength = "50" })
+                    @Html.ValidationMessageFor(model => model.CursoEspecialidade)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Instituição:
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DropDownListFor(model => model.InstituicaoId, ViewData["Instituicao"] as MultiSelectList, new { id = "cbInstituicao", style="width:300px;" })
+                </td>
+            </tr>
+@*            <tr>
+                <td>
+                    Selecione as Turmas
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.ListBox("LstTurmas", ViewData["Turmas"] as MultiSelectList, new { id = "LstTurmas", style = "width:200px; height:200px" })
+                </td>
+                <td align="center" style="vertical-align: middle">
+                    <div>
+                        <input type="button" id="btnSelecionar" value=">>" onclick="javascript:SelecionaRemoveTurmas(document.getElementById('LstTurmas'), document.getElementById('LstTurmaSelecionada'));" />
+                    </div>
+                    <div>
+                        <input type="button" id="btnRemover" value="<<" onclick="javascript:SelecionaRemoveTurmas(document.getElementById('LstTurmaSelecionada'), document.getElementById('LstTurmas'));" />
+                    </div>
+                </td>
+                <td>
+                    @Html.ListBox("LstTurmaSelecionada", ViewData["CursoTurmas"] as MultiSelectList, new { id = "LstTurmaSelecionada", style = "width:200px; height:200px" })
+                </td>
+            </tr>*@
+            <tr>
+                <th colspan="2" style="background-color: transparent !Important;">
+                    <span>
+                        <input type="button" value="Voltar" id="btnVoltar" onclick="javascript:window.location='@Url.Content("~/Curso/Index")';" />
+                    </span><span>
+                        <input type="submit" value="Salvar" id="btnSalvar" />
+                    </span>
+                </th>
+            </tr>
+        </table>
+        <input type="hidden" id="txtSelect" name="txtSelect" />
+    </fieldset>
+}
+<script language="javascript" type="text/javascript">
+    function SelecionaRemoveTurmas(listOrigem, listDestino) {
+        var i;
+        for (i = 0; i < listOrigem.options.length; i++) {
+            if (listOrigem.options[i].selected == true) {
+                var op = document.createElement("OPTION");
+                op.text = listOrigem.options[i].text;
+                op.value = listOrigem.options[i].value;
+                listDestino.options.add(op);
+                listOrigem.options.remove(i);
+                i--;
+            }
+        }
+        RelacionarTurmas();
+    }
+
+    function RelacionarTurmas() {
+        var select = "";
+        var txt = document.getElementById("txtSelect");
+        var ordem = "";
+        for (i = 0; i < document.getElementById("LstTurmaSelecionada").options.length; i++) {
+            ordem = ordem + document.getElementById("LstTurmaSelecionada").options[i].value + ","
+        }
+        select = select + ordem.substring(0, ordem.lastIndexOf(","));
+        txt.value = select;
+    }
+
+</script>

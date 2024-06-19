@@ -1,0 +1,44 @@
+﻿@model APCD.Modelos.Produtos
+
+@{
+    ViewBag.Title = "Novo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Salvar", "Produto")) {
+    <fieldset>
+        <legend>Produtos</legend>
+            @*@Html.ValidationSummary(true)*@
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ProdutoNome)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.ProdutoNome, new { id="txtProdutoNome"})
+            @Html.ValidationMessageFor(model => model.ProdutoNome)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ProdutoStatus)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.ProdutoStatus, (List<SelectListItem>)(ViewData["Status"]), new { id="cbTipo"})
+            @Html.ValidationMessageFor(model => model.ProdutoStatus)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ProdutoTipo)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.ProdutoTipo, (List<SelectListItem>)(ViewData["Tipo"]), new { id="cbStatus"})
+            @Html.ValidationMessageFor(model => model.ProdutoTipo)
+        </div>
+        <br />
+        <div>
+            <span>
+                <input type="button" name="btnVoltar" value="Voltar" id="btnVoltar" onclick="javascript:window.location='@Url.Content("~/Produto/Index")'"/>
+            </span><span>
+                <input type="submit" value="Salvar" id="btnSalvar" />
+            </span>
+        </div>
+    </fieldset>
+}

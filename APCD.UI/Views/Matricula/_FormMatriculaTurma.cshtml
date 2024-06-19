@@ -1,0 +1,51 @@
+﻿@model IEnumerable<APCD.Modelos.MatriculaTurma>
+<script language="javascript" type="text/javascript">
+    function ExcluirTurma(Matricula, Turma) {
+        $.post('@Url.Content("~/Matricula/ExcluirTurma")', { Matricula: Matricula, Turma: Turma }, function (result) { $("#LstMatriculaTurma").html(result); });
+    }
+</script>
+<br />
+@if (Model != null)
+{
+    <table style="width: 100%">
+        <tr>
+            <th>
+            </th>
+            <th>
+                Turma
+            </th>
+            <th>
+                Curso
+            </th>
+            <th>
+                Especialidade
+            </th>
+            <th>
+                Instituição
+            </th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a href="#">
+                        <img src='@Url.Content("~/Content/images/delete.png")' alt="Excluir" style="width:15px; height:15px; text-align:center" onclick='javascript:ExcluirTurma("@item.MatriculaId", "@item.TurmaId")'/>
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => new APCD.Negocios.TurmaNegocios().RetornaTurmaPorId(item.TurmaId).TurmaNome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => new APCD.Negocios.CursoNegocios().RetornaCursoPorTurma(item.TurmaId).CursoNome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => new APCD.Negocios.CursoNegocios().RetornaCursoPorTurma(item.TurmaId).CursoEspecialidade)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => new APCD.Negocios.InstituicaoNegocios().RetornaInstituicaoPorTurma(item.TurmaId).InstituicaoNome)
+                </td>
+            </tr>
+        }
+    </table>
+
+}

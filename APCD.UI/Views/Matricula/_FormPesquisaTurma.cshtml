@@ -1,0 +1,48 @@
+﻿@model IEnumerable<APCD.Modelos.Turmas>
+<script language="javascript" type="text/javascript">
+    function IncluirTurma(Valor) {
+        var matid = $("#hdIdMatricula").val();
+        $.post('@Url.Content("~/Matricula/IncluirTurma")', { turma: Valor, matricula: matid }, function (result) { $("#LstMatriculaTurma").html(result); });
+    } 
+</script>
+<br />
+@if (Model != null)
+{
+    <table>
+        <tr>
+            <th>
+            </th>
+            <th>
+                Turma
+            </th>
+            <th>
+                Curso
+            </th>
+            <th>
+                Especialidade
+            </th>
+            <th>
+                Instituição
+            </th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr onclick='javascript:IncluirTurma("@item.TurmaId");' style="text-decoration:none; cursor:pointer">
+                <td>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => new APCD.Negocios.TurmaNegocios().RetornaTurmaPorId(item.TurmaId).TurmaNome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => new APCD.Negocios.CursoNegocios().RetornaCursoPorTurma(item.TurmaId).CursoNome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => new APCD.Negocios.CursoNegocios().RetornaCursoPorTurma(item.TurmaId).CursoEspecialidade)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => new APCD.Negocios.InstituicaoNegocios().RetornaInstituicaoPorTurma(item.TurmaId).InstituicaoNome)
+                </td>
+            </tr>
+        }
+    </table>
+}

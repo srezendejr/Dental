@@ -1,0 +1,80 @@
+﻿@model APCD.Modelos.Turmas
+<script language="javascript" type="text/javascript">
+    $(function () {
+        $("#txtDataInicio").datepicker({ dateFormat: 'dd/mm/yy' });
+        $("#txtDataFim").datepicker({ dateFormat: 'dd/mm/yy' });
+    });
+    $(document).ready(
+        function () {
+            $("#cboCurso").change(function () {
+                $.post('@Url.Content("~/Turma/RetornaInstiuicaoPorCurso")', { Curso: $("#cboCurso").val() }, function (result) { $("#txtInstituicao").val(result.NomeInstituicao); $("#txtEspecialidade").val(result.Especialidade); });
+            })
+        });
+</script>
+<table id="TableForms">
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.TurmaNome)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.TextBoxFor(model => model.TurmaNome, new { id = "txtNome", style = "width:300px", maxlength = "50" })
+            @Html.ValidationMessageFor(model => model.TurmaNome)
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 30%">
+            @Html.LabelFor(model => model.TurmaDataInicio)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.TurmaDataFim)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.TextBoxFor(model => model.TurmaDataInicio, new { id = "txtDataInicio", style = "width:100px" })
+            @Html.ValidationMessageFor(model => model.TurmaDataInicio)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.TurmaDataFim, new { id = "txtDataFim", style = "width:100px" })
+            @Html.ValidationMessageFor(model => model.TurmaDataFim)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.CursoId)
+        </td>
+        <td>
+            @Html.Label("Especialidade:")
+        </td>
+        <td>
+            @Html.Label("Instituição do Curso:")
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.DropDownListFor(model => model.CursoId, ViewData["Curso"] as MultiSelectList, new { id = "cboCurso", style = "width:250px" })
+        </td>
+        <td>
+        @if (Model != null)
+        { 
+            @Html.TextBox("txtEspecialidade", new APCD.Negocios.CursoNegocios().RetornaCursoPorId(Model.CursoId).CursoEspecialidade, new { id = "txtEspecialidade", style = "width:300px", @readonly = "readonly" })
+        }
+        else
+        { 
+            @Html.TextBox("txtEspecialidade", "", new { id = "txtEspecialidade", style = "width:300px", @readonly = "readonly" })
+        }
+        </td>
+        <td>
+        @if (Model != null)
+        { 
+            @Html.TextBox("txtInstituicao", new APCD.Negocios.InstituicaoNegocios().RetornaInsituicaoPorId(new APCD.Negocios.CursoNegocios().RetornaCursoPorId(Model.CursoId).InstituicaoId).InstituicaoNome, new { id = "txtInstituicao", style = "width:300px", @readonly = "readonly" })
+        }
+        else
+        { 
+            @Html.TextBox("txtInstituicao", "", new { id = "txtInstituicao", style = "width:300px", @readonly = "readonly" })
+        }
+        </td>
+    </tr>
+</table>

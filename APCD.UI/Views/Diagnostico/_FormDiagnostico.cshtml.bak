@@ -1,0 +1,287 @@
+﻿@model APCD.Modelos.Diagnosticos
+<link href="@Url.Content("~/Content/uploadify.css")" rel="stylesheet" />
+@*<script src="@Url.Content("~/Scripts/jquery-1.4.1.js")" type="text/javascript"></script>*@
+<script src="@Url.Content("~/Scripts/jquery.uploadify.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(window).load(
+    function () {
+        $("#ImagemFrontal").fileUpload({
+            'uploader': '@Url.Content("~/Scripts/uploader.swf")',
+            'cancelImg': '@Url.Content("~/Content/images/cancel.png")',
+            'buttonText': 'Selecione Imagem',
+            'script': '@Url.Content("~/Diagnostico/UploadFrontal")',
+            'folder': '@Url.Content("~/uploads")',
+            'fileDesc': 'Arquivos de Imagem',
+            'fileExt': '*.jpg;*.jpeg;*.gif;*.png',
+            'multi': true,
+            'auto': true,
+            'onComplete': function (event, ID, fileObj, response, data) {
+                var caminho = '@Url.Content("~/uploads/")' + response;
+                $("#ImgFrontal").attr({ src: caminho });
+            }
+        });
+    }
+);
+    $(window).load(
+    function () {
+        $("#ImagemRx").fileUpload({
+            'uploader': '@Url.Content("~/Scripts/uploader.swf")',
+            'cancelImg': '@Url.Content("~/Content/images/cancel.png")',
+            'buttonText': 'Selecione Imagem',
+            'script': '@Url.Content("~/Diagnostico/UploadRx")',
+            'folder': '@Url.Content("~/uploads")',
+            'fileDesc': 'Arquivos de Imagem',
+            'fileExt': '*.jpg;*.jpeg;*.gif;*.png',
+            'multi': true,
+            'auto': true,
+            'onComplete': function (event, ID, fileObj, response, data) {
+                var caminho = '@Url.Content("~/uploads/")' + response;
+                $("#ImgRx").attr({ src: caminho });
+            }
+        });
+    }
+);
+    $(window).load(
+    function () {
+        $("#ImagemSuperior").fileUpload({
+            'uploader': '@Url.Content("~/Scripts/uploader.swf")',
+            'cancelImg': '@Url.Content("~/Content/images/cancel.png")',
+            'buttonText': 'Selecione Imagem',
+            'script': '@Url.Content("~/Diagnostico/UploadSuperior")',
+            'folder': '@Url.Content("~/uploads")',
+            'fileDesc': 'Arquivos de Imagem',
+            'fileExt': '*.jpg;*.jpeg;*.gif;*.png',
+            'multi': true,
+            'auto': true,
+            'onComplete': function (event, ID, fileObj, response, data) {
+                var caminho = '@Url.Content("~/uploads/")' + response;
+                $("#ImgSuperior").attr({ src: caminho });
+            }
+        });
+    }
+);
+    $(window).load(
+    function () {
+        $("#ImagemInferior").fileUpload({
+            'uploader': '@Url.Content("~/Scripts/uploader.swf")',
+            'cancelImg': '@Url.Content("~/Content/images/cancel.png")',
+            'buttonText': 'Selecione Imagem',
+            'script': '@Url.Content("~/Diagnostico/UploadInferior")',
+            'folder': '@Url.Content("~/uploads")',
+            'fileDesc': 'Arquivos de Imagem',
+            'fileExt': '*.jpg;*.jpeg;*.gif;*.png',
+            'multi': true,
+            'auto': true,
+            'onComplete': function (event, ID, fileObj, response, data) {
+                var caminho = '@Url.Content("~/uploads/")' + response;
+                $("#ImgInferior").attr({ src: caminho });
+            }
+        });
+    }
+);
+</script>
+<script language="javascript" type="text/javascript">
+    function ListarProcedimento() {
+        var Texto = $("#txtTratamento").val();
+        if (Texto.length >= 3) {
+<<<<<<< .mine
+            $.post('@Url.Content("~/Diagnostico/PesquisaProcedimentoPorNome")', { Proced: Texto }, function (result) { $("#LstPesquisaProcedimento").html(result); });
+=======
+            $.post('~/Diagnostico/PesquisaProcedimentoPorNome', { Proced: Texto }, function (result) { $("#LstPesquisaProcedimento").html(result); });
+>>>>>>> .r73
+            //alert(Texto);
+        }
+        else {
+            $("#LstPesquisaProcedimento").html(null);
+        }
+    }
+    function AbrePopupPesquisaCliente() {
+        var retorno = window.showModalDialog('@Url.Content("~/Paciente/PesquisaPaciente")', "Pesquisa Paciente", 'center:yes; resizable:no; dialogHeight:600px; dialogWidth:800px;');
+        if (retorno != null) {
+            var Id = retorno.split(",");
+            $("#txtNomePaciente").val(Id[1]);
+            $("#hdId").val(Id[0]);
+        }
+    }
+    function AbrePopupPaciente(Valor) {
+        var width = screen.width;
+        var heigth = screen.height;
+        if (Valor != "")
+            window.showModalDialog('@Url.Content("~/Paciente/VisualizacaoPaciente?Id=")' + Valor, "Pesquisa Paciente", 'center:yes; resizable:no; dialogHeight:' + heigth + '; dialogWidth:' + width + ';');
+    }
+    function AbrirPopUpImagem(Valor) {
+        var width = screen.width;
+        var heigth = screen.height;
+        if (extrairNomeArquivo(Valor.src).extensao != '') {
+            window.showModalDialog('@Url.Content("~/Diagnostico/AbrirPopUpImagem?Imagem=")' + Valor.src, 'PopUp Imagens', 'center:yes; resizable:no; dialogHeight:' + heigth + ';dialogWidth:' + width + ';');
+        }
+        else {
+            alert("É necessário carregar uma imagem");
+        }
+    }
+
+    function extrairNomeArquivo(Caminho) {
+        Caminho = Caminho.replace(/\\/g, "/");
+        var Arquivo = Caminho.substring(Caminho.lastIndexOf('/') + 1);
+        var Extensao = Arquivo.substring(Arquivo.lastIndexOf('.') + 1);
+        return { arquivo: Arquivo, extensao: Extensao };
+    }
+
+
+</script>
+<table style="width: 100%;" id="TableForms">
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.PacienteId)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.DiagnosticoData)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.HiddenFor(model => model.PacienteId, new { id = "hdId" })
+            @Html.HiddenFor(model => model.DiagnosticoId, new { id = "hdDiagnosticoId" })
+            <span><a href="#" onclick='javascript:AbrePopupPaciente(document.getElementById("hdId").value)'
+                id="LnkAbrirPaciente">
+                @if (Model == null)
+                {
+                    @Html.TextBox("txtNomePaciente", "", new { id = "txtNomePaciente", style = "width:350px", @readonly = "true", alt = "Clique aqui para ver os detalhes do paciente" })
+                }
+                else
+                { 
+                    @Html.TextBox("txtNomePaciente", new APCD.Dados.PacienteDados().RetornaPacientePorId(Model.PacienteId).PacienteNome, new { id = "txtNomePaciente", style = "width:350px", @readonly = "true", alt = "Clique aqui para ver os detalhes do paciente" })
+                }
+            </a></span><span><a href="#" onclick="javascript:AbrePopupPesquisaCliente();">
+                <img src='@Url.Content("~/Content/images/Zoom_32x32.png")' alt="Pesquisar Paciente" style="width:30px; height:30px; vertical-align:middle"/>
+            </a></span>
+        </td>
+        <td>
+            @if (Model == null)
+            {
+                @Html.TextBox("txtDataDiagnostico", DateTime.Now.ToShortDateString(), new { id = "txtDataDiagnostico", style = "width:100px;", @disabled = "true" })
+            }
+            else
+            { 
+                @Html.TextBoxFor(model => model.DiagnosticoData, new { id = "txtDataDiagnostico", style = "width:100px;", @disabled = "true" })
+            }
+        </td>
+    </tr>
+</table>
+<div style="height: 600px; width: 100%; border: 1px solid transparent">
+    <div style="height: 100%; width: 33%; border: 1px solid black; float: left; position: relative;">
+        <div id="LstDentes">
+            @if (Model == null)
+            { 
+                @Html.Partial("_FormDiagnosticoDente")
+            }
+            else
+            { 
+                @Html.Partial("_FormDiagnosticoDente", new APCD.Dados.DiagnosticoDenteDados().RetornaDentePorDiagnostico(Model.DiagnosticoId))
+            }
+        </div>
+        <input type="button" id="btnRx" value="RX" style="width: 60px; float: left; position: relative"
+            onclick='javascript:AbrirPopUpImagem(document.getElementById("ImgRx"));' />
+        @if (Model == null)
+        { 
+            <img src="" alt="" id="ImgRx" style="width: 0%; height: 0%" />
+        }
+        else
+        { 
+            <img src='@Url.Action("/ImagemRx", new { Id = Model.DiagnosticoId })' alt="" id="ImgRx" style="width: 0%; height: 0%" />
+        }
+        <input type="button" id="btnFrontal" value="Frontal" style="width: 60px; float: left;
+            position: relative" onclick='javascript:AbrirPopUpImagem(document.getElementById("ImgFrontal"));' />
+        @if (Model == null)
+        { 
+            <img src="" alt="" name="ImgFrontal" id="ImgFrontal" style="width: 0%; height: 0%" />
+        }
+        else
+        { 
+            <img src='@Url.Action("/ImagemFrontal", new { Id = Model.DiagnosticoId })' alt="" name="ImgFrontal" id="ImgFrontal" style="width: 0%; height: 0%" />
+        }
+    </div>
+    <div style="height: 100%; width: 33%; border: 1px solid black; float: left; position: relative;
+        margin-left: 2px">
+        <div style="padding: 0.6em 0.6em 0.6em 0.6em; text-align: center; height: 270px;"
+            id="superior">
+            <a href="#" onclick='javascript:AbrirPopUpImagem(document.getElementById("ImgSuperior"));'>
+                @if (Model == null)
+                { 
+                    <img src='@Url.Content("~/Content/images/semImg.png")' alt="" style="height: 100%; width: 100%; border-style:none" id="ImgSuperior" name="ImgSuperior"/>
+                }
+                else
+                { 
+                    <img src='@Url.Action("/ImagemSuperior", new { Id = Model.DiagnosticoId })' alt="" style="height: 100%; width: 100%" id="ImgSuperior" name="ImgSuperior" />
+                }
+            </a>
+        </div>
+        <div style="padding: 0.6em 0.6em 0.6em 0.6em; text-align: center; height: 270px;"
+            id="inferior">
+            <a href="#" onclick='javascript:AbrirPopUpImagem(document.getElementById("ImgInferior"));'>
+                @if (Model == null)
+                { 
+                    <img src='@Url.Content("~/Content/images/semImg.png")' alt="" style="height: 100%; width: 100%" id="ImgInferior" name="ImgInferior" />
+                }
+                else
+                { 
+                    <img src='@Url.Action("/ImagemInferior", new { Id = Model.DiagnosticoId })' alt="" style="height: 100%; width: 100%" id="ImgInferior" name="ImgInferior" />
+                }
+            </a>
+        </div>
+    </div>
+    <div style="height: 100%; width: 33%; border: 1px solid black; float: right; position: relative;">
+        <div style="padding: 0.6em 0.6em 0.6em 0.6em">
+            Procedimento:
+        </div>
+        <div style="padding: 0.6em 0.6em 0.6em 0.6em">
+            @Html.TextBox("txtTratamento", "", new { id = "txtTratamento", onkeydown = "javascript:ListarProcedimento();", style = "width:300px" })
+        </div>
+        <div id="LstPesquisaProcedimento">
+            @if (Model == null)
+            {
+                @Html.Partial("_FormPesquisaTratamento")
+            }
+        </div>
+        <div id="Tratamento">
+            @if (TempData["Procedimento"] != null)
+            {   
+                @Html.Partial("_FormDiagnosticoTratamento", TempData["Procedimento"])
+            }
+            else
+            {
+                @Html.Partial("_FormDiagnosticoTratamento")
+            }
+        </div>
+    </div>
+</div>
+<table style="width: 100%;" id="TableForms">
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.ImagemFrontal)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.ImagemRx)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.ImagemSuperior)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.ImagemInferior)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="file" id="ImagemFrontal" />
+        </td>
+        <td>
+            <input type="file" id="ImagemRx" />
+        </td>
+        <td>
+            <input type="file" id="ImagemSuperior" />
+        </td>
+        <td>
+            <input type="file" id="ImagemInferior" />
+        </td>
+    </tr>
+</table>

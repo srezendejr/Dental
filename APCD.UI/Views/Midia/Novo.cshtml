@@ -1,0 +1,27 @@
+﻿@model APCD.Modelos.Midias
+@{
+    ViewBag.Title = "Novo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Salvar", "Midia"))
+{
+    <fieldset>
+        <legend>Midias</legend>
+        @*@Html.ValidationSummary(true)*@
+        <div class="editor-label">
+            @Html.LabelFor(model => model.MidiaNome)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.MidiaNome, new { id = "txtNomeMidia", maxlenght = "50", style = "width:250px" })
+            @Html.ValidationMessageFor(model => model.MidiaNome)
+        </div>
+        <br />
+        <div>
+            <span>
+                <input type="button" name="btnVoltar" value="Voltar" id="btnVoltar" onclick="javascript:window.location='@Url.Content("~/Midia/Index")'"/>
+            </span><span>
+                <input type="submit" value="Salvar" id="btnSalvar" />
+            </span>
+        </div>
+    </fieldset>
+}

@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Pesquisa Paciente";
+    Layout = "~/Views/Shared/_LayoutPopUp.cshtml";
+}
+<script language="javascript" type="text/javascript">
+    function RealizaPesquisa() {
+        var paciente = document.getElementById("txtPesquisa").value;
+        $.ajax({
+            type: 'Post',
+            type: 'html',
+            url: '@Url.Content("~/Paciente/PesquisaPacientePorNome")',
+            data: $("#frmPesquisa").serialize(),
+            success: function (result) { $("#DivPesquisa").html(result); }
+        });
+    }
+</script>
+@using (Html.BeginForm("PesquisaPacientePorNome", "Paciente", FormMethod.Post, new { id = "frmPesquisa" }))
+{
+    <div id="Div1" style="width:100%; text-align:left; padding: 0 0 5px 0">
+        <span>Pesquisa:</span> <span>@Html.TextBox("txtPesquisa", "", new { id = "txtPesquisa" })</span>
+        <span>
+            <input type="button" value="Pesquisar" id="btnPesquisa" onclick="javascript:RealizaPesquisa();" /></span>
+    </div>
+    
+    <div id="DivPesquisa">
+        @Html.Partial("_TabelaResultadoPaciente")
+    </div>
+}

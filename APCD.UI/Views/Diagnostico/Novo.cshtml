@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Novo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Salvar", "Diagnostico", FormMethod.Post, new { id="frmDiagnostico"}))
+{
+    @Html.ValidationSummary(false)
+    <fieldset>
+        <legend>Diagnosticos</legend>
+        <table id="TableForms">
+            @Html.Partial("_FormDiagnostico")
+            <tr>
+                <th colspan="3" style="background-color: transparent !Important;">
+                    <span>
+                        <input type="button" value="Voltar" id="btnVoltar" onclick="javascript:window.location='@Url.Content("~/Diagnostico/Index")';" />
+                    </span><span>
+                        <input type="submit" value="Salvar" id="btnSalvar" />
+                    </span>
+                </th>
+            </tr>
+        </table>
+    </fieldset>
+}

@@ -1,0 +1,76 @@
+﻿@model IEnumerable<APCD.Modelos.DiagnosticoTratamentos>
+<script language="javascript" type="text/javascript">
+
+    function ExcluirProcedimento(Valor, Diagid) {
+        $.get('@Url.Content("~/Diagnostico/ExcluirProcedimento")', { proc: Valor, diagid:Diagid }, function (result) { $("#Tratamento").html(result); });
+    }
+    function AtualizarStatus(Valor) {
+        var diagid = $("#hdDiagId").val();
+        $.post('@Url.Content("~/Diagnostico/MudarEstadoProcedimento")', { proc: Valor, diagid: diagid }, function (result) { $("#Tratamento").html(result); });
+    }
+
+</script>
+
+<br />
+<div id="TblProcedimento">
+    <table style="width: 100%" id="ListaProcedimentos">
+        <tr>
+            <th>
+            </th>
+            <td>
+                Procedimento
+            </td>
+            <td>
+                Valor
+            </td>
+            <td>
+                Status
+            </td>
+        </tr>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            { 
+            <tr>
+                <td>
+                    <a href="#">
+                        <img src='@Url.Content("~/Content/images/delete.png")' alt="Excluir" style="width:15px; height:15px; text-align:center" onclick='javascript:ExcluirProcedimento("@item.ProcedimentoId", "@item.DiagnosticoId")'/>
+                    </a>
+                    @Html.HiddenFor(modelItem => item.DiagnosticoId, new { id = "hdDiagId" })
+                    @Html.HiddenFor(modelItem => item.DiagnosticoTratamentoId, new { id = "hdDiagProcId" })
+                </td>
+                <td>
+                    @Html.HiddenFor(modelItem => item.ProcedimentoId, new { id = "hdProcId" })
+                    @Html.DisplayFor(modelItem => item.ProcedimentoNome, new { id = "txtNomeProc", style = "width:50px;border-style:none;", @readonly = "readonly" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProcedimentoValor, new { id = "txtValor", style = "width:50px;border-style:none; font-size: .85em !Important;", @readonly = "readonly" })
+                </td>
+                <td>
+                    <a href="#" onclick='javascript:AtualizarStatus("@item.ProcedimentoId")'>
+                        @if (item.DiagnosticoTratamentoStatus == 1)
+                        {
+                        
+                            <img src='@Url.Content("~/Content/images/NaoConcluido.png")' alt="Não Executado" style="width: 15px; height: 15px; text-align: center" />
+                        
+                        }
+                        else
+                        {
+                        
+                            <img src='@Url.Content("~/Content/images/Concluido.png")' alt="Executado" style="width: 15px; height: 15px; text-align: center" />
+                        
+                        }
+                    </a>
+                </td>
+            </tr>
+            }
+        }
+        <tr style="border-bottom-style: hidden">
+            <td style="border-style: none">
+            </td>
+            <td style="border-style: none">
+                Valor Total: @Html.TextBox("txtValor", ViewData["ValorTotal"], new { id = "txtValor", style = "width:50px;border-style:none", @readonly = "true" })
+            </td>
+        </tr>
+    </table>
+</div>

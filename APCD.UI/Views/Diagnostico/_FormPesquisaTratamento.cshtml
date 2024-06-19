@@ -1,0 +1,31 @@
+﻿@model IEnumerable<APCD.Modelos.Procedimentos>
+<script language="javascript" type="text/javascript">
+    function AdicionarProcedimento(Valor) {
+        var diagid = $("#hdDiagnosticoId").val();
+        $.post('@Url.Content("~/Diagnostico/InserirProcedimento")', { proc: Valor, diagid: diagid }, function (result) { $("#Tratamento").html(result); });
+    }
+</script>
+@if (Model != null)
+{
+    <table style="width: 100%">
+        <tr>
+            <th>
+                Procedimento
+            </th>
+            <th>
+                Valor
+            </th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr onclick="javascript:AdicionarProcedimento('@item.ProcedimentoId');" style="text-decoration:none; cursor:pointer">
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProcedimentoNome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProcedimentoValor)
+                </td>
+            </tr>
+        }
+    </table>
+}

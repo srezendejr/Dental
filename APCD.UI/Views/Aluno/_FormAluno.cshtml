@@ -1,0 +1,237 @@
+﻿@model APCD.Modelos.Alunos
+<script language="javascript" type="text/javascript">
+    $(function () {
+        $("#txtDataNasc").mask("99/99/9999");
+        $("#txtAlunoCPF").mask("999.999.999-99");
+        $("#txtCep").mask("99999-999");
+        $("#txtFoneRes").mask("(99)9999-9999");
+        $("#txtFoneCel").mask("(99)9999-9999");
+        $("#txtFoneCom").mask("(99)9999-9999");
+    });
+    function PesquisarCep() {
+        var cep = document.getElementById("txtCep").value;
+        $.ajax({
+            type: 'POST',
+            dataType: 'Json',
+            url: '@Url.Content("~/Aluno/PesquisarCep?CodigoCep=")' + cep,
+            success: function (result) {
+                if (result == null) {
+                    alert("Cep não encontrado.");
+                    $("#txtCep").focus();
+                }
+                else {
+                    $("#cbTipoLog").val(result.CepTipoLogradouro);
+                    $("#txtEndereco").val(result.CepLogradouro);
+                    $("#txtComplemento").val(result.CepComplementoLog);
+                    $("#txtBairro").val(result.CepBairro);
+                    $("#txtCidade").val(result.CepCidade);
+                    $("#cbUF").val(result.CepUF);
+                    $("#txtNroEndereco").focus();
+                }
+            },
+            error: function (result, ajaxOptions, thrownError) { alert("Erro: " + result.status + "-" + result.statusText + "-" + thrownError); }
+        });
+    }
+</script>
+<table id="TableForms">
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AlunoNome)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.DataNascimento)
+        </td>
+        <td>
+            Data de Cadastro:
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoNome, new { id = "txtNomeAluno", maxlength = "50", style = "width:300px" })
+            @Html.ValidationMessageFor(model => model.AlunoNome)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DataNascimento, new { id = "txtDataNasc", style = "width:100px" })
+            @Html.ValidationMessageFor(model => model.DataNascimento)
+        </td>
+        <td>
+            @Html.TextBox("txtDataCadastro", DateTime.Now.ToString("dd/MM/yyyy"), new { id = "txtDataCadastro", disabled = "disabled", style = "width:100px" })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AlunoCPF)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.AlunoRG)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.AlunoRGExped)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoCPF, new { id = "txtAlunoCPF", style = "width:115px" })
+            @Html.ValidationMessageFor(model => model.AlunoCPF)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoRG, new { id = "txtAlunoRG", style = "width:115px", maxlenght = "10" })
+            @Html.ValidationMessageFor(model => model.AlunoRG)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoRGExped, new { id = "txtAlunoRGExp", style = "width:115px" })
+            @Html.ValidationMessageFor(model => model.AlunoRGExped)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AlunoSexo)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.DropDownListFor(model => model.AlunoSexo, (List<SelectListItem>)ViewData["Sexo"], new { id = "cbSexo" })
+        </td>
+    </tr>
+    <tr>
+        <th colspan="3">
+            Filiação
+        </th>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AlunoMae)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.AlunoPai)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.AlunoResponsavel)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoMae, new { id = "txtAlunoMae", maxlength = "50", style = "width:300px" })
+            @Html.ValidationMessageFor(model => model.AlunoMae)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoPai, new { id = "txtAlunoPai", maxlength = "50", style = "width:300px" })
+            @Html.ValidationMessageFor(model => model.AlunoPai)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoResponsavel, new { id = "txtAlunoResponsavel", maxlength = "50", style = "width:300px;" })
+            @Html.ValidationMessageFor(model => model.AlunoResponsavel)
+        </td>
+    </tr>
+    <tr>
+        <th colspan="3">
+            Endereço
+        </th>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AlunoCep)
+        </td>
+        <td>
+            Endereço:
+        </td>
+        <td>
+            @Html.LabelFor(model => model.AlunoComplemento)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoCep, new { id = "txtCep", style = "width:100px" })
+            <a href="javascript:PesquisarCep()">Pesquisar</a>
+            @Html.ValidationMessageFor(model => model.AlunoCep)
+        </td>
+        <td>
+            <span>
+                @Html.DropDownListFor(model => model.AlunoTipoLog, (List<SelectListItem>)(ViewData["TipoLog"]), new { id = "cbTipoLog", style = "width:150px" })
+                @Html.ValidationMessageFor(model => model.AlunoTipoLog)
+            </span><span>
+                @Html.TextBoxFor(model => model.AlunoLogradouro, new { id = "txtEndereco", maxlength = "50", style = "width:230px" }),
+                @Html.ValidationMessageFor(model => model.AlunoLogradouro)
+            </span><span>
+                @Html.TextBoxFor(model => model.AlunoNroEndereco, new { id = "txtNroEndereco", style = "width:50px" })
+            </span>
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoComplemento, new { id = "txtComplemento", maxlength = "100", sytle = "width:300px" })
+            @Html.ValidationMessageFor(model => model.AlunoComplemento)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AlunoBairro)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.AlunoCidade)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.AlunoUF)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoBairro, new { id = "txtBairro", maxlength = "50", style = "width:250px" })
+            @Html.ValidationMessageFor(model => model.AlunoBairro)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoCidade, new { id = "txtCidade", maxlength = "100", style = "width:300px" })
+            @Html.ValidationMessageFor(model => model.AlunoCidade)
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.AlunoUF, (List<SelectListItem>)ViewData["UF"], new { id = "cbUF" })
+            @Html.ValidationMessageFor(model => model.AlunoUF)
+        </td>
+    </tr>
+    <tr>
+        <th colspan="3">
+            Contato
+        </th>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AlunoFoneResidencial)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.AlunoFoneCelular)
+        </td>
+        <td>
+            <span style="padding-right: 1.2em">
+                @Html.LabelFor(model => model.AlunoFoneComercial)
+            </span>
+            @Html.LabelFor(model => model.AlunoFoneComercialRamal)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoFoneResidencial, new { id = "txtFoneRes", style = "width:120px" })
+            @Html.ValidationMessageFor(model => model.AlunoFoneResidencial)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoFoneCelular, new { id = "txtFoneCel", style = "width:120px" })
+            @Html.ValidationMessageFor(model => model.AlunoFoneCelular)
+        </td>
+        <td>
+            <span style="padding-right: 1em">
+                @Html.TextBoxFor(model => model.AlunoFoneComercial, new { id = "txtFoneCom", style = "width:120px" })
+                @Html.ValidationMessageFor(model => model.AlunoFoneComercial)
+            </span><span>
+                @Html.TextBoxFor(model => model.AlunoFoneComercialRamal, new { id = "txtRamal", style = "width:120px" })
+                @Html.ValidationMessageFor(model => model.AlunoFoneComercialRamal)
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AlunoEmail)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.TextBoxFor(model => model.AlunoEmail, new { id = "txtEmail", style = "width:300px", maxlenght = "100" })
+        </td>
+    </tr>
+</table>

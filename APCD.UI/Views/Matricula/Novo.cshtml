@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Novo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("SalvarAluno","Matricula"))
+{ 
+    <fieldset>
+        <legend>Matricula</legend>
+        <table>
+            @Html.Partial(Url.Content("~/Views/Aluno/_FormAluno.cshtml"))
+            <tr>
+                <td>
+                    <input type="button" value="Cancelar" id="btnCancelar" onclick="javascript:window.location='@Url.Content("~/Matricula/Index")';"/>
+                </td>
+                <td>
+                    <input type="submit" value="Avançar" id="btnSalvar" />
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+}

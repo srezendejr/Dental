@@ -1,0 +1,233 @@
+﻿@model APCD.Modelos.DiagnosticoDentes
+<script language="javascript" type="text/javascript">
+    function AdicionarDente() {
+        $.ajax({
+            type: 'Post',
+            typeData: 'html',
+            url: '@Url.Content("~/Diagnostico/InserirDente")',
+            data: $("#frmDiagnostico").serialize(),
+            success: function (result) { }
+        });
+    }
+    function ProximaDiv(Atual, Proxima) {
+        AdicionarDente();
+        document.getElementById("Diagnostico" + Atual).style.display = "none";
+        document.getElementById("Diagnostico" + Proxima).style.display = "inline";
+    }
+    function AnteriorDiv(Atual, Anterior) {
+        AdicionarDente();
+        document.getElementById("Diagnostico" + Atual).style.display = "none";
+        document.getElementById("Diagnostico" + Anterior).style.display = "inline";
+    }
+    function VoltarParaChkLst() {
+        document.getElementById("Diagnostico1").style.display = "inline";
+        document.getElementById("LnkVoltarChk").style.display = "none";
+        document.getElementById("lstDenteCk").style.display = "none";
+        $("#txtNroDente").val('');
+    }
+    function ListarDiagDentes(Valor) {
+        AdicionarDente();
+        var DivDiagnosticos = document.getElementsByTagName("Div");
+        var i;
+        for (i = 1; i <= 6; i++) {
+            document.getElementById("Diagnostico" + i).style.display = "none";
+
+        }
+        document.getElementById("LnkVoltarChk").style.display = "inline";
+        if (Valor.length >= 1) {
+            $.post('@Url.Content("~/Diagnostico/ListarChkDentes")', { dente: Valor }, function (result) { $("#lstDenteCk").html(result); }), function (result, ajaxOptions, thrownError) { alert(thrownError); };
+            document.getElementById("lstDenteCk").style.display = "inline";
+        }
+    }
+
+</script>
+<br />
+<div id="Diagnostico1" style="display: inline">
+    <center>
+        <input type="button" id="btnDiagAnt1" onclick="javascript:AnteriorDiv(1, 6);" value="<<<" />
+        <input type="button" id="btnDiagProx1" onclick="javascript:ProximaDiv(1, 2);" value=">>>" />
+    </center>
+    <br />
+    <p style="margin-bottom: 0; font-weight: bold">
+        1. Situação Dentária e Periodontal (imagem – fotografias oclusais)
+    </p>
+    <p style="margin-bottom: 0; padding-left: 0.4em">
+        1.1 AvaliaçãoPeriodontal (motivos de extração)
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Lesão de furca com comunicação vestíbulo-lingual maior do que 5mm &nbsp &nbsp
+        @Html.TextBox("txtDentes1", ViewData["Dente1"], new { id = "txtDentes1", style = "width:80px" })</p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Bolsa em região sem possibilidade de raspar&nbsp
+        @Html.TextBox("txtDentes2", ViewData["Dente2"], new { id = "txtDentes2", style = "width:60px" })</p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Mobilidade não reversível&nbsp &nbsp
+        @Html.TextBox("txtDentes3", ViewData["Dente3"], new { id = "txtDentes3", style = "width:80px" })</p>
+</div>
+<div id="Diagnostico2" style="display: none;">
+    <center>
+        <input type="button" id="btnDiagAnt2" onclick="javascript:AnteriorDiv(2, 1);" value="<<<" />
+        <input type="button" id="btnDiagProx2" onclick="javascript:ProximaDiv(2, 3);" value=">>>" />
+    </center>
+    <br />
+    <p style="margin-bottom: 0; font-weight: bold">
+        1. Situação Dentária e Periodontal (imagem – fotografias oclusais)
+    </p>
+    <p style="margin-bottom: 0; padding-left: 0.4em">
+        1.2 Avaliação Dentária (motivos de extração)
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Fratura longitudinal da raiz &nbsp &nbsp
+        @Html.TextBox("txtDentes4", ViewData["Dente4"], new { id = "txtDentes4", style = "width:80px" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Cárie envolvendo furca &nbsp &nbsp
+        @Html.TextBox("txtDentes5", ViewData["Dente5"], new { id = "txtDentes5", style = "width:80px" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Trepanação radicular com lesão &nbsp &nbsp
+        @Html.TextBox("txtDentes6", ViewData["Dente6"], new { id = "txtDentes6", style = "width:80px" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Posicionamento que impede reabilitação &nbsp &nbsp
+        @Html.TextBox("txtDentes7", ViewData["Dente7"], new { id = "txtDentes7", style = "width:80px" })
+    </p>
+</div>
+<div id="Diagnostico3" style="display: none;">
+    <center>
+        <input type="button" id="btnDiagAnt3" onclick="javascript:AnteriorDiv(3, 2);" value="<<<" />
+        <input type="button" id="btnDiagProx3" onclick="javascript:ProximaDiv(3, 4);" value=">>>" />
+    </center>
+    <br />
+    <p style="margin-bottom: 0; font-weight: bold">
+        1. Situação Dentária e Periodontal (imagem – fotografias oclusais)
+    </p>
+    <p style="margin-bottom: 0; padding-left: 0.4em">
+        1.3 Avaliação Dentária e Periodontal (tratamento possível)
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Pino soltando ou muito curto &nbsp &nbsp
+        @Html.TextBox("txtDentes8", ViewData["Dente8"], new { id = "txtDentes8", style = "width:80px" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Coroa soltando ou antiestética &nbsp &nbsp
+        @Html.TextBox("txtDentes9", ViewData["Dente9"], new { id = "txtDentes9", style = "width:80px" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Lesão periapical &nbsp &nbsp
+        @Html.TextBox("txtDentes10", ViewData["Dente10"], new { id = "txtDentes10", style = "width:80px" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Doença periodontal inicial &nbsp &nbsp
+        @Html.TextBox("txtDentes11", ViewData["Dente11"], new { id = "txtDentes11", style = "width:80px" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Fenótipo periodontal fino &nbsp &nbsp
+        @Html.TextBox("txtDentes12", ViewData["Dente12"], new { id = "txtDentes12", style = "width:80px" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Fenótipo periodontal sem tecido queratinizado &nbsp &nbsp
+        @Html.TextBox("txtDentes13", ViewData["Dente13"], new { id = "txtDentes13", style = "width:80px" })
+    </p>
+</div>
+<div id="Diagnostico4" style="display: none;">
+    <center>
+        <input type="button" id="btnDiagAnt4" onclick="javascript:AnteriorDiv(4, 3);" value="<<<" />
+        <input type="button" id="btnDiagProx4" onclick="javascript:ProximaDiv(4, 5);" value=">>>" />
+    </center>
+    <br />
+    <p style="margin-bottom: 0; font-weight: bold">
+        2. Tecido ósseo de ancoragem (Imagem – Radiografia Panorâmica)
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Não há osso para ancoragem &nbsp &nbsp
+        @Html.CheckBoxFor(model => model.DiagnosticoDenteOssoAnc, new { id = "chkOssoAncoragem" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Região para o espaço protético &nbsp &nbsp
+        @Html.TextBox("txtDentes14", ViewData["Dente14"], new { id = "txtDentes14", style = "width:80px" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Espessura em palpação &nbsp
+        @Html.RadioButtonFor(model => model.DiagnosticoDenteEspessura, 2, new { id = "rdbGrosso" }) Grosso &nbsp
+        @Html.RadioButtonFor(model => model.DiagnosticoDenteEspessura, 1, new { id = "rdbMedio" }) Médio &nbsp 
+        @Html.RadioButtonFor(model => model.DiagnosticoDenteEspessura, 0, new { id = "rdbFino" }) Fino
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Espessura em tomografias &nbsp
+        @Html.TextBoxFor(model => model.DiagnosticoDenteTomografia, new { id = "txtEspesTom", style = "width:30px" }) (mm)
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Densidade subjetiva em tomografias &nbsp 
+        @Html.RadioButtonFor(model=> model.DiagnosticoDenteDensidade, 0, new { id = "rdbD1" }) D1 &nbsp 
+        @Html.RadioButtonFor(model => model.DiagnosticoDenteDensidade, 1, new { id = "rdbD2" }) D2 &nbsp
+        @Html.RadioButtonFor(model => model.DiagnosticoDenteDensidade, 2, new { id = "rdbD3" }) D3 &nbsp 
+        @Html.RadioButtonFor(model => model.DiagnosticoDenteDensidade, 3, new { id = "rdbD4" }) D4
+    </p>
+</div>
+<div id="Diagnostico5" style="display: none;">
+    <center>
+        <input type="button" id="btnDiagAnt5" onclick="javascript:AnteriorDiv(5, 4);" value="<<<" />
+        <input type="button" id="btnDiagProx5" onclick="javascript:ProximaDiv(5, 6);" value=">>>" />
+    </center>
+    <br />
+    <p style="margin-bottom: 0; font-weight: bold">
+        3. Planejamento Reverso (Imagem – Fotografia frontal ocluída)
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Perda de rebordo em altura &nbsp @Html.CheckBox("chkPerdaAltura", false, new { id = "chkPerdaAltura" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Perfil facial – Angles &nbsp 
+        @Html.RadioButtonFor(model => model.DiagnosticoDentePerfil, 0, new { id = "rdbClasse1" }) Classe I &nbsp 
+        @Html.RadioButtonFor(model => model.DiagnosticoDentePerfil, 1, new { id = "rdbClasse2" }) Classe II &nbsp 
+        @Html.RadioButtonFor(model => model.DiagnosticoDentePerfil, 2, new { id = "rdbClasse3" }) Classe III
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Dimensão Vertical de Oclusão &nbsp 
+        @Html.RadioButtonFor(model => model.DiagnosticoDenteDimensao, 1, new { id = "rbdPresente" }) Presente &nbsp 
+        @Html.RadioButtonFor(model => model.DiagnosticoDenteDimensao, 0, new { id = "rdbAusente" }) Ausente
+    </p>
+</div>
+<div id="Diagnostico6" style="display: none;">
+    <center>
+        <input type="button" id="btnDiagAnt6" onclick="javascript:AnteriorDiv(6, 5);" value="<<<" />
+        <input type="button" id="btnDiagProx6" onclick="javascript:ProximaDiv(6, 1);" value=">>>" />
+    </center>
+    <br />
+    <p style="margin-bottom: 0; font-weight: bold">
+        4. Sistema Estomatognático (imagem – Fotografias oclusais)
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Sintomas articulares &nbsp
+        @Html.CheckBoxFor(model => model.DiagnosticoDenteSintArt, new { id = "chkSintomasArt" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Parafunção &nbsp @Html.CheckBoxFor(model => model.DiagnosticoDenteParafuncao, new { id = "chkParafuncao" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Fadiga e dor muscular &nbsp @Html.CheckBoxFor(model => model.DiagnosticoDenteFadiga, new { id = "chkFadiga" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Lesões e úlceras que não saram &nbsp @Html.CheckBoxFor(model => model.DiagnosticoDenteLesao, new { id = "chkLesoes" })
+    </p>
+    <p style="margin-bottom: 0; padding-left: 1em">
+        Dificuldade de abrir a boca &nbsp @Html.CheckBoxFor(model => model.DiagnosticoDenteDificuldade, new { id = "chkDifcAbrir" })
+    </p>
+</div>
+<div id="lstDenteCk" style="display: none">
+@if (Model == null)
+{ 
+    @Html.Partial("_FormListaCheckList")
+}
+</div>
+<br />
+<div id="LnkVoltarChk" style="display: none">
+    <a href="#" onclick="javascript:VoltarParaChkLst();">Retornar Para o ChekList</a>
+</div>
+<div style="padding: 0.6em 0.6em 0.6em 0.6em">
+    Dente:
+</div>
+<div style="padding: 0.6em 0.6em 0.6em 0.6em">
+    @Html.TextBox("txtNroDente", "", new { id = "txtNroDente", style = "width:50px", onkeyup = "javascript:ListarDiagDentes(document.getElementById('txtNroDente').value);" })
+</div>
